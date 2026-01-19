@@ -1,0 +1,85 @@
+﻿<Window x:Class="MonitorBilansuKalorycznego.View.AddProductWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        Title="Dodaj nowy produkt" Height="450" Width="400"
+        WindowStartupLocation="CenterScreen" ResizeMode="NoResize"
+        Background="White">
+
+    <Window.Resources>
+        <Style TargetType="TextBox">
+            <Setter Property="Padding" Value="5"/>
+            <Setter Property="Margin" Value="0,5,0,15"/>
+            <Setter Property="FontSize" Value="14"/>
+            <Setter Property="BorderBrush" Value="#DDD"/>
+        </Style>
+        <Style TargetType="TextBlock">
+            <Setter Property="Foreground" Value="#555"/>
+            <Setter Property="FontWeight" Value="SemiBold"/>
+        </Style>
+    </Window.Resources>
+
+    <Border Padding="30">
+        <StackPanel>
+            <TextBlock Text="Dodaj nowy produkt" FontSize="22" FontWeight="Bold" Margin="0,0,0,20" Foreground="#333"/>
+
+            <TextBlock Text="Nazwa produktu:"/>
+            <TextBox x:Name="InputName" />
+
+            <Grid>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="*"/>
+                    <ColumnDefinition Width="10"/>
+                    <ColumnDefinition Width="*"/>
+                </Grid.ColumnDefinitions>
+
+                <StackPanel Grid.Column="0">
+                    <TextBlock Text="Kcal (na 100g):"/>
+                    <TextBox x:Name="InputKcal" />
+                </StackPanel>
+
+                <StackPanel Grid.Column="2">
+                    <TextBlock Text="Kategoria:"/>
+                    <TextBox x:Name="InputCategory" Text="Inne"/>
+                </StackPanel>
+            </Grid>
+
+            <TextBlock Text="Makroskładniki (opcjonalne):" Margin="0,10,0,10" Foreground="#888"/>
+
+            <Grid>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="*"/>
+                    <ColumnDefinition Width="10"/>
+                    <ColumnDefinition Width="*"/>
+                    <ColumnDefinition Width="10"/>
+                    <ColumnDefinition Width="*"/>
+                </Grid.ColumnDefinitions>
+
+                <StackPanel Grid.Column="0">
+                    <TextBlock Text="Białko (g):"/>
+                    <TextBox x:Name="InputProtein" Text="0"/>
+                </StackPanel>
+
+                <StackPanel Grid.Column="2">
+                    <TextBlock Text="Węgle (g):"/>
+                    <TextBox x:Name="InputCarbs" Text="0"/>
+                </StackPanel>
+
+                <StackPanel Grid.Column="4">
+                    <TextBlock Text="Tłuszcz (g):"/>
+                    <TextBox x:Name="InputFat" Text="0"/>
+                </StackPanel>
+            </Grid>
+
+            <StackPanel Orientation="Horizontal" HorizontalAlignment="Right" Margin="0,20,0,0">
+                <Button Content="Anuluj" IsCancel="True" Width="100" Height="35" Background="Transparent" BorderThickness="0" Foreground="#888" Cursor="Hand"/>
+                <Button Content="Zapisz produkt" Click="BtnSave_Click" Width="140" Height="35" Background="#2ECC71" Foreground="White" BorderThickness="0" FontWeight="Bold" Cursor="Hand">
+                    <Button.Resources>
+                        <Style TargetType="Border">
+                            <Setter Property="CornerRadius" Value="5"/>
+                        </Style>
+                    </Button.Resources>
+                </Button>
+            </StackPanel>
+        </StackPanel>
+    </Border>
+</Window>

@@ -1,0 +1,27 @@
+﻿<Window x:Class="MonitorBilansuKalorycznego.View.AddMealWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        Title="Zjedz posiłek" Height="300" Width="400" WindowStartupLocation="CenterScreen" ResizeMode="NoResize" Background="White">
+    <Border Padding="20">
+        <StackPanel>
+            <TextBlock Text="Dodaj posiłek do dziennika" FontSize="20" FontWeight="Bold" Margin="0,0,0,20"/>
+
+            <TextBlock Text="Wybierz produkt:" Foreground="#666"/>
+            <ComboBox x:Name="ComboProducts" Height="35" Margin="0,5,0,15" DisplayMemberPath="Name"/>
+
+            <TextBlock Text="Ilość (gramy):" Foreground="#666"/>
+            <TextBox x:Name="InputAmount" Height="35" Padding="5,8" Margin="0,5,0,20" Text="100"/>
+
+            <StackPanel Orientation="Horizontal" HorizontalAlignment="Right">
+                <Button Content="Anuluj" IsCancel="True" Width="100" Height="35" Background="Transparent" BorderThickness="0" Foreground="#888"/>
+                <Button Content="+ Dodaj do dziennika" Click="BtnAdd_Click" Width="150" Height="35" Background="#1E40AF" Foreground="White" FontWeight="Bold" BorderThickness="0">
+                    <Button.Resources>
+                        <Style TargetType="Border">
+                            <Setter Property="CornerRadius" Value="5"/>
+                        </Style>
+                    </Button.Resources>
+                </Button>
+            </StackPanel>
+        </StackPanel>
+    </Border>
+</Window>
