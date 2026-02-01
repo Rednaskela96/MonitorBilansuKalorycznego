@@ -29,6 +29,47 @@ namespace MonitorBilansuKalorycznego.Logic
             return logs.Sum(l => l.GetTotalCaloriesConsumed());
         }
 
+        public static double CalculateTotalBurned(List<DailyLog> logs)
+        {
+            if (logs == null || !logs.Any()) return 0;
+            return logs.Sum(l => l.GetTotalCaloriesBurned());
+        }
+
+        public static int GetDaysOnGoal(List<DailyLog> logs, double dailyGoal)
+        {
+            if (logs == null || !logs.Any()) return 0;
+            return logs.Count(l => l.CalculateCalories() <= dailyGoal);
+        }
+
+        public static int GetCurrentStreak(List<DailyLog> allLogs, double dailyGoal)
+        {
+            if (allLogs == null || !allLogs.Any()) return 0;
+
+            var sorted = allLogs.OrderByDescending(l => l.Date.Date).ToList();
+            int streak = 0;
+            var expectedDate = DateTime.Today;
+
+            foreach (var log in sorted)
+            {
+                if (log.Date.Date != expectedDate.Date) break;
+                if (log.CalculateCalories() > dailyGoal) break;
+                streak++;
+                expectedDate = expectedDate.AddDays(-1);
+            }
+
+            return streak;
+        }
+
+        public static List<DailyLog> GetLogsForPeriod(List<DailyLog> allLogs, int days)
+        {
+            if (allLogs == null) return new List<DailyLog>();
+            var startDate = DateTime.Today.AddDays(-(days - 1));
+            return allLogs
+                .Where(l => l.Date.Date >= startDate.Date && l.Date.Date <= DateTime.Today)
+                .OrderBy(l => l.Date)
+                .ToList();
+        }
+
         // Wykrywanie trendu (czy użytkownik je coraz więcej, czy mniej)
         public static string GetTrend(List<DailyLog> logs)
         {

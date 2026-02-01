@@ -42,13 +42,31 @@
 
                 <TextBlock Text="OloFit" FontSize="24" FontWeight="Bold" VerticalAlignment="Center" Foreground="Black"/>
 
-                <StackPanel Grid.Column="1" Orientation="Horizontal" HorizontalAlignment="Center">
-                    <Button Content="Statystyki" Style="{StaticResource MenuButton}" Click="Nav_Dashboard_Click"/>
-                    <Button Content="Dziennik" Style="{StaticResource MenuButton}" Click="Nav_Journal_Click"/>
-                    <Button Content="Baza danych" Style="{StaticResource MenuButton}" Click="Nav_Database_Click"/>
+                <StackPanel Grid.Column="1" Orientation="Horizontal" HorizontalAlignment="Center" VerticalAlignment="Center">
+                    <Button x:Name="BtnNavDashboard" Click="Nav_Dashboard_Click" Style="{StaticResource MenuButton}">
+                        <StackPanel Orientation="Horizontal">
+                            <TextBlock Text="&#xE9D9;" FontFamily="Segoe MDL2 Assets" FontSize="13" VerticalAlignment="Center" Margin="0,0,6,0"/>
+                            <TextBlock Text="Statystyki" VerticalAlignment="Center"/>
+                        </StackPanel>
+                    </Button>
+                    <Button x:Name="BtnNavJournal" Click="Nav_Journal_Click" Style="{StaticResource MenuButton}">
+                        <StackPanel Orientation="Horizontal">
+                            <TextBlock Text="&#xE736;" FontFamily="Segoe MDL2 Assets" FontSize="13" VerticalAlignment="Center" Margin="0,0,6,0"/>
+                            <TextBlock Text="Dziennik" VerticalAlignment="Center"/>
+                        </StackPanel>
+                    </Button>
+                    <Button x:Name="BtnNavDatabase" Click="Nav_Database_Click" Style="{StaticResource MenuButton}">
+                        <StackPanel Orientation="Horizontal">
+                            <TextBlock Text="&#xE8F1;" FontFamily="Segoe MDL2 Assets" FontSize="13" VerticalAlignment="Center" Margin="0,0,6,0"/>
+                            <TextBlock Text="Baza danych" VerticalAlignment="Center"/>
+                        </StackPanel>
+                    </Button>
                 </StackPanel>
 
-                <Ellipse Grid.Column="2" Width="35" Height="35" Fill="#E0E0E0" Cursor="Hand" MouseLeftButtonDown="Nav_Profile_Click"/>
+                <Border Grid.Column="2" Width="38" Height="38" CornerRadius="19" Background="#E8E8E8" Cursor="Hand" MouseLeftButtonDown="Nav_Profile_Click" ToolTip="Profil">
+                    <TextBlock Text="&#xE77B;" FontFamily="Segoe MDL2 Assets" FontSize="18"
+                               HorizontalAlignment="Center" VerticalAlignment="Center" Foreground="#666"/>
+                </Border>
             </Grid>
         </Border>
 

@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace MonitorBilansuKalorycznego.Interfaces
 {
-    internal interface ICalorieCalculable
+    public interface ICalorieCalculable
     {
         double CalculateCalories();
     }

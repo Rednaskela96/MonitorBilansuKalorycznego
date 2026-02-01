@@ -1,27 +1,114 @@
 ﻿<Window x:Class="MonitorBilansuKalorycznego.View.AddMealWindow"
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-        Title="Zjedz posiłek" Height="300" Width="400" WindowStartupLocation="CenterScreen" ResizeMode="NoResize" Background="White">
+        Title="Zjedz posiłek" Height="400" Width="460" WindowStartupLocation="CenterScreen" ResizeMode="NoResize" Background="White">
+
+    <Window.Resources>
+        <Style x:Key="MealTabStyle" TargetType="RadioButton">
+            <Setter Property="FontSize" Value="13"/>
+            <Setter Property="FontWeight" Value="SemiBold"/>
+            <Setter Property="Cursor" Value="Hand"/>
+            <Setter Property="Foreground" Value="#999"/>
+            <Setter Property="Margin" Value="0,0,20,0"/>
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="RadioButton">
+                        <Border Background="Transparent" Padding="0,8" BorderThickness="0,0,0,2" x:Name="Bd" BorderBrush="Transparent">
+                            <ContentPresenter/>
+                        </Border>
+                        <ControlTemplate.Triggers>
+                            <Trigger Property="IsChecked" Value="True">
+                                <Setter Property="Foreground" Value="#2ECC71"/>
+                                <Setter TargetName="Bd" Property="BorderBrush" Value="#2ECC71"/>
+                            </Trigger>
+                        </ControlTemplate.Triggers>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+    </Window.Resources>
+
     <Border Padding="20">
-        <StackPanel>
-            <TextBlock Text="Dodaj posiłek do dziennika" FontSize="20" FontWeight="Bold" Margin="0,0,0,20"/>
+        <Grid>
+            <Grid.RowDefinitions>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="*"/>
+                <RowDefinition Height="Auto"/>
+            </Grid.RowDefinitions>
 
-            <TextBlock Text="Wybierz produkt:" Foreground="#666"/>
-            <ComboBox x:Name="ComboProducts" Height="35" Margin="0,5,0,15" DisplayMemberPath="Name"/>
+            <TextBlock Text="Dodaj posiłek do dziennika" FontSize="20" FontWeight="Bold" Foreground="#1A1A2E" Margin="0,0,0,10"/>
 
-            <TextBlock Text="Ilość (gramy):" Foreground="#666"/>
-            <TextBox x:Name="InputAmount" Height="35" Padding="5,8" Margin="0,5,0,20" Text="100"/>
+            <!-- Tabs -->
+            <StackPanel Grid.Row="1" Orientation="Horizontal" Margin="0,0,0,15">
+                <RadioButton x:Name="TabProduct" Content="Pojedynczy produkt" IsChecked="True" GroupName="MealTabs"
+                             Style="{StaticResource MealTabStyle}" Checked="TabProduct_Checked"/>
+                <RadioButton x:Name="TabSet" Content="Zestaw dań" GroupName="MealTabs"
+                             Style="{StaticResource MealTabStyle}" Checked="TabSet_Checked"/>
+            </StackPanel>
 
-            <StackPanel Orientation="Horizontal" HorizontalAlignment="Right">
-                <Button Content="Anuluj" IsCancel="True" Width="100" Height="35" Background="Transparent" BorderThickness="0" Foreground="#888"/>
-                <Button Content="+ Dodaj do dziennika" Click="BtnAdd_Click" Width="150" Height="35" Background="#1E40AF" Foreground="White" FontWeight="Bold" BorderThickness="0">
+            <!-- Panel: Single product -->
+            <StackPanel x:Name="PanelProduct" Grid.Row="2">
+                <TextBlock Text="Wybierz produkt:" Foreground="#666" FontSize="12" FontWeight="SemiBold" Margin="0,0,0,5"/>
+                <ComboBox x:Name="ComboProducts" Height="38" Margin="0,0,0,15" DisplayMemberPath="Name" Padding="8,0"
+                          VerticalContentAlignment="Center" FontSize="13"/>
+
+                <TextBlock Text="Ilość (gramy):" Foreground="#666" FontSize="12" FontWeight="SemiBold" Margin="0,0,0,5"/>
+                <TextBox x:Name="InputAmount" Height="38" Padding="10,0" FontSize="14" Text="100"
+                         VerticalContentAlignment="Center" BorderBrush="#E0E0E0">
+                    <TextBox.Resources>
+                        <Style TargetType="Border"><Setter Property="CornerRadius" Value="6"/></Style>
+                    </TextBox.Resources>
+                </TextBox>
+            </StackPanel>
+
+            <!-- Panel: Meal set -->
+            <StackPanel x:Name="PanelSet" Grid.Row="2" Visibility="Collapsed">
+                <TextBlock Text="Wybierz zestaw:" Foreground="#666" FontSize="12" FontWeight="SemiBold" Margin="0,0,0,5"/>
+                <ComboBox x:Name="ComboSets" Height="38" Margin="0,0,0,15" DisplayMemberPath="Name" Padding="8,0"
+                          VerticalContentAlignment="Center" FontSize="13" SelectionChanged="ComboSets_SelectionChanged"/>
+
+                <TextBlock Text="Zawartość zestawu:" Foreground="#666" FontSize="12" FontWeight="SemiBold" Margin="0,0,0,5"/>
+                <Border BorderBrush="#F0F0F0" BorderThickness="1" CornerRadius="6" Padding="5" MaxHeight="140">
+                    <ScrollViewer VerticalScrollBarVisibility="Auto">
+                        <ItemsControl x:Name="ListSetPreview">
+                            <ItemsControl.ItemTemplate>
+                                <DataTemplate>
+                                    <Border Padding="6,4" BorderBrush="#F5F5F5" BorderThickness="0,0,0,1">
+                                        <Grid>
+                                            <Grid.ColumnDefinitions>
+                                                <ColumnDefinition Width="*"/>
+                                                <ColumnDefinition Width="Auto"/>
+                                            </Grid.ColumnDefinitions>
+                                            <TextBlock FontSize="12">
+                                                <Run Text="{Binding Product.Name, Mode=OneWay}" FontWeight="SemiBold"/>
+                                                <Run Text=" — "/><Run Text="{Binding Amount, Mode=OneWay}"/><Run Text="g"/>
+                                            </TextBlock>
+                                            <TextBlock Grid.Column="1" FontSize="12" Foreground="#1E3A8A" FontWeight="SemiBold">
+                                                <Run Text="{Binding CalculateCalories, StringFormat=N0, Mode=OneWay}"/>
+                                                <Run Text=" kcal"/>
+                                            </TextBlock>
+                                        </Grid>
+                                    </Border>
+                                </DataTemplate>
+                            </ItemsControl.ItemTemplate>
+                        </ItemsControl>
+                    </ScrollViewer>
+                </Border>
+
+                <TextBlock x:Name="TxtSetTotal" Foreground="#666" FontSize="12" Margin="0,8,0,0" HorizontalAlignment="Right"/>
+            </StackPanel>
+
+            <!-- Buttons -->
+            <StackPanel Grid.Row="3" Orientation="Horizontal" HorizontalAlignment="Right" Margin="0,20,0,0">
+                <Button Content="Anuluj" IsCancel="True" Width="90" Height="38" Background="Transparent" BorderThickness="0" Foreground="#888" Cursor="Hand"/>
+                <Button x:Name="BtnConfirm" Content="+ Dodaj do dziennika" Click="BtnAdd_Click" Height="38" Padding="18,0"
+                        Background="#2ECC71" Foreground="White" FontWeight="Bold" BorderThickness="0" Cursor="Hand">
                     <Button.Resources>
-                        <Style TargetType="Border">
-                            <Setter Property="CornerRadius" Value="5"/>
-                        </Style>
+                        <Style TargetType="Border"><Setter Property="CornerRadius" Value="6"/></Style>
                     </Button.Resources>
                 </Button>
             </StackPanel>
-        </StackPanel>
+        </Grid>
     </Border>
 </Window>

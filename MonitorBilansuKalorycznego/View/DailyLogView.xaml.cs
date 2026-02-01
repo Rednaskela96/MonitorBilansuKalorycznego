@@ -24,20 +24,24 @@ namespace MonitorBilansuKalorycznego.View
 
         private void LoadLogForDate(DateTime date)
         {
-            // Aktualizacja daty w nagłówku
             TxtDate.Text = date.ToString("dddd, dd MMMM, yyyy");
 
-            // Szukamy logu w bazie
             _currentLog = _appData.LogManager.Items.FirstOrDefault(l => l.Date.Date == date.Date);
 
-            // Jak nie ma, tworzymy nowy (ale nie dodajemy do bazy póki pusty, lub dodajemy od razu - tutaj dla uproszczenia dodajmy jeśli nie istnieje)
             if (_currentLog == null)
             {
                 _currentLog = new DailyLog { Date = date };
-                _appData.LogManager.Add(_currentLog);
             }
 
             RefreshStats();
+        }
+
+        private void EnsureLogPersisted()
+        {
+            if (!_appData.LogManager.Items.Contains(_currentLog))
+            {
+                _appData.LogManager.Add(_currentLog);
+            }
         }
 
         private void RefreshStats()
@@ -82,6 +86,7 @@ namespace MonitorBilansuKalorycznego.View
 
         private void BtnNextDay_Click(object sender, RoutedEventArgs e)
         {
+            if (_currentDate.Date >= DateTime.Today) return;
             _currentDate = _currentDate.AddDays(1);
             LoadLogForDate(_currentDate);
         }
@@ -89,11 +94,14 @@ namespace MonitorBilansuKalorycznego.View
         // --- AKCJE ---
         private void BtnAddMeal_Click(object sender, RoutedEventArgs e)
         {
-            // Otwórz okno wyboru
-            var window = new AddMealWindow(_appData.FoodManager.Items);
+            var window = new AddMealWindow(_appData.FoodManager.Items, _appData.MealSetManager.Items);
             if (window.ShowDialog() == true)
             {
-                _currentLog.AddMeal(window.ResultEntry);
+                EnsureLogPersisted();
+                foreach (var entry in window.ResultEntries)
+                {
+                    _currentLog.AddMeal(entry);
+                }
                 _appData.LogManager.SaveToFile();
                 RefreshStats();
             }
@@ -106,7 +114,38 @@ namespace MonitorBilansuKalorycznego.View
 
             if (window.ShowDialog() == true)
             {
+                EnsureLogPersisted();
                 _currentLog.AddActivity(window.ResultEntry);
+                _appData.LogManager.SaveToFile();
+                RefreshStats();
+            }
+        }
+
+        private void BtnEditMeal_Click(object sender, RoutedEventArgs e)
+        {
+            var entry = ((Button)sender).Tag as MealEntry;
+            if (entry == null) return;
+
+            var window = new AddMealWindow(_appData.FoodManager.Items, entry);
+            if (window.ShowDialog() == true)
+            {
+                entry.Product = window.ResultEntry.Product;
+                entry.Amount = window.ResultEntry.Amount;
+                _appData.LogManager.SaveToFile();
+                RefreshStats();
+            }
+        }
+
+        private void BtnEditActivity_Click(object sender, RoutedEventArgs e)
+        {
+            var entry = ((Button)sender).Tag as ActivityEntry;
+            if (entry == null) return;
+
+            var window = new AddActivityEntryWindow(_appData.ActivityManager.Items, entry);
+            if (window.ShowDialog() == true)
+            {
+                entry.Activity = window.ResultEntry.Activity;
+                entry.Duration = window.ResultEntry.Duration;
                 _appData.LogManager.SaveToFile();
                 RefreshStats();
             }
@@ -128,8 +167,7 @@ namespace MonitorBilansuKalorycznego.View
             var entry = ((Button)sender).Tag as ActivityEntry;
             if (entry != null)
             {
-                // Tutaj brakuje metody RemoveActivity w DailyLog, trzeba dodać w Modelu
-                _currentLog.Activities.Remove(entry);
+                _currentLog.RemoveActivity(entry);
                 _appData.LogManager.SaveToFile();
                 RefreshStats();
             }

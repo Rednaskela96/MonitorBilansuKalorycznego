@@ -16,6 +16,7 @@ namespace MonitorBilansuKalorycznego.Data
         public DataManager<FoodProduct> FoodManager { get; private set; }
         public DataManager<PhysicalActivity> ActivityManager { get; private set; }
         public DataManager<DailyLog> LogManager { get; private set; }
+        public DataManager<MealSet> MealSetManager { get; private set; }
 
         // --- KONSTRUKTOR ---
         public ApplicationData()
@@ -25,6 +26,7 @@ namespace MonitorBilansuKalorycznego.Data
             FoodManager = new DataManager<FoodProduct>("foods.json");
             ActivityManager = new DataManager<PhysicalActivity>("activities.json");
             LogManager = new DataManager<DailyLog>("logs.json");
+            MealSetManager = new DataManager<MealSet>("meal_sets.json");
 
             LoadAll();
         }
@@ -32,22 +34,38 @@ namespace MonitorBilansuKalorycznego.Data
 
         public void SaveAll()
         {
-            string json = JsonConvert.SerializeObject(CurrentUser, Formatting.Indented);
-            File.WriteAllText(_profilePath, json);
+            try
+            {
+                string json = JsonConvert.SerializeObject(CurrentUser, Formatting.Indented);
+                File.WriteAllText(_profilePath, json);
+            }
+            catch (Exception ex)
+            {
+                System.Windows.MessageBox.Show($"Błąd zapisu profilu: {ex.Message}",
+                    "Błąd zapisu", System.Windows.MessageBoxButton.OK, System.Windows.MessageBoxImage.Error);
+            }
 
             FoodManager.SaveToFile();
             ActivityManager.SaveToFile();
             LogManager.SaveToFile();
+            MealSetManager.SaveToFile();
         }
 
         public void LoadAll()
         {
-            if (File.Exists(_profilePath))
+            try
             {
-                string json = File.ReadAllText(_profilePath);
-                CurrentUser = JsonConvert.DeserializeObject<UserProfile>(json) ?? new UserProfile();
+                if (File.Exists(_profilePath))
+                {
+                    string json = File.ReadAllText(_profilePath);
+                    CurrentUser = JsonConvert.DeserializeObject<UserProfile>(json) ?? new UserProfile();
+                }
+                else
+                {
+                    CurrentUser = new UserProfile();
+                }
             }
-            else
+            catch (Exception)
             {
                 CurrentUser = new UserProfile();
             }
@@ -55,6 +73,7 @@ namespace MonitorBilansuKalorycznego.Data
             FoodManager.LoadFromFile();
             ActivityManager.LoadFromFile();
             LogManager.LoadFromFile();
+            MealSetManager.LoadFromFile();
         }
 
         public ReportData GetCurrentWeeklyReport()

@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Globalization;
 using System.Windows;
 using System.Windows.Controls;
 using MonitorBilansuKalorycznego.Data;
@@ -43,8 +44,14 @@ namespace MonitorBilansuKalorycznego.View
                 var user = _appData.CurrentUser;
                 user.Name = InputName.Text;
                 user.Age = int.Parse(InputAge.Text);
-                user.Weight = double.Parse(InputWeight.Text.Replace(".", ","));
-                user.Height = double.Parse(InputHeight.Text.Replace(".", ","));
+                user.Weight = double.Parse(InputWeight.Text.Replace(",", "."), CultureInfo.InvariantCulture);
+                user.Height = double.Parse(InputHeight.Text.Replace(",", "."), CultureInfo.InvariantCulture);
+
+                if (user.Age <= 0 || user.Weight <= 0 || user.Height <= 0)
+                {
+                    MessageBox.Show("Wiek, waga i wzrost muszą być większe od zera!");
+                    return;
+                }
 
                 if (ComboGender.SelectedItem != null)
                     user.Gender = (Gender)ComboGender.SelectedItem;

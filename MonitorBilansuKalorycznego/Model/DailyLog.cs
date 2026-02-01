@@ -34,6 +34,11 @@ namespace MonitorBilansuKalorycznego.Model
             Activities.Add(activity);
         }
 
+        public void RemoveActivity(ActivityEntry activity)
+        {
+            Activities.Remove(activity);
+        }
+
         // --- LOGIKA BIZNESOWA (OBLICZENIA) ---
 
         // 1. Ile zjedliśmy łącznie?

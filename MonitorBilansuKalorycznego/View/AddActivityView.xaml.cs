@@ -27,12 +27,26 @@ namespace MonitorBilansuKalorycznego.View
 
         private void BtnSave_Click(object sender, RoutedEventArgs e)
         {
-            if (string.IsNullOrWhiteSpace(InputName.Text)) return;
+            if (string.IsNullOrWhiteSpace(InputName.Text))
+            {
+                MessageBox.Show("Podaj nazwę aktywności!");
+                return;
+            }
 
-            // Aktualizujemy obiekt
+            if (!double.TryParse(InputKcal.Text, out double kcal) || kcal <= 0)
+            {
+                MessageBox.Show("Podaj poprawne spalanie kalorii (większe od zera)!");
+                return;
+            }
+
             ActivityData.Name = InputName.Text;
-            if (double.TryParse(InputKcal.Text, out double kcal))
-                ActivityData.CaloriesPerHour = kcal;
+            ActivityData.CaloriesPerHour = kcal;
+
+            if (!ActivityData.Validate())
+            {
+                MessageBox.Show("Dane aktywności są niepoprawne!");
+                return;
+            }
 
             DialogResult = true;
             Close();

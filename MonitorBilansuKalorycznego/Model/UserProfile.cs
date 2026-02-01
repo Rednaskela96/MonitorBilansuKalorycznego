@@ -52,11 +52,15 @@ namespace MonitorBilansuKalorycznego.Model
             return Math.Round(bmr * multiplier);
         }
 
-        // 3. Ostateczny cel kaloryczny (Ręczny lub wyliczony)
+        private const double DefaultCalorieGoal = 2000;
+
         public double GetDailyCalorieGoal()
         {
             if (CustomDailyCalorieGoal > 0)
                 return CustomDailyCalorieGoal;
+
+            if (Weight <= 0 || Height <= 0 || Age <= 0)
+                return DefaultCalorieGoal;
 
             return CalculateTDEE();
         }

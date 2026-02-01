@@ -33,7 +33,7 @@ namespace MonitorBilansuKalorycznego.Logic
             {
                 Title = $"Raport tygodniowy ({StartDate:dd.MM} - {EndDate:dd.MM})",
                 AverageConsumed = StatisticsCalculator.CalculateAverageConsumed(_weeklyLogs),
-                TotalBurned = StatisticsCalculator.CalculateTotalConsumed(_weeklyLogs), // Błąd w nazewnictwie metody w poprzednim kroku, ale logicznie suma
+                TotalBurned = StatisticsCalculator.CalculateTotalBurned(_weeklyLogs),
                 DaysTracked = _weeklyLogs.Count,
                 GoalAchievementRate = CalculateGoalAchievementRate()
             };
