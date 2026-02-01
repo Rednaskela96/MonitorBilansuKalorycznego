@@ -1,27 +1,28 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace MonitorBilansuKalorycznego.Model
 {
-    public class MealEntry
+    // Reprezentuje jeden wpis posiłku w dzienniku (produkt + ilość gramów).
+    public class MealEntry : BaseEntry
     {
-        public Guid Id { get; set; } = Guid.NewGuid();
         public DateTime MealTime { get; set; } = DateTime.Now;
-
-        // Powiązanie z produktem (agregacja wg diagramu)
+        
         public FoodProduct Product { get; set; } = new FoodProduct();
 
-        // Ilość w gramach
         public double Amount { get; set; }
 
-        public double CalculateCalories()
+        //Oblicza kalorie na podstawie produktu i ilości
+        public override double CalculateCalories()
         {
             if (Product == null) return 0;
             return Product.CalculateCaloriesForAmount(Amount);
         }
+
+        // OVERRIDE metody wirtualnej — zwraca czytelne podsumowanie posiłku
+        public override string GetSummary()
+            => $"{Product.Name} — {Amount}g ({CalculateCalories():N0} kcal)";
+
+        // Właściwość pomocnicza do bindowania w XAML
         public double CaloriesDisplay => CalculateCalories();
     }
 }

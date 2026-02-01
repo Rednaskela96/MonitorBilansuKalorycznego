@@ -1,3 +1,15 @@
+<!-- ===================================================================
+     FoodDatabaseView.xaml — widok bazy danych (produkty, aktywności, zestawy dań).
+     ZASOBY — TabRadioStyle z ControlTemplate i Trigger (zmiana wyglądu
+       RadioButton po zaznaczeniu: kolor + podkreślenie).
+     RadioButton jako zakładki — Checked="Tab_Products_Checked" itd.
+       → obsługa w code-behind przełącza enum DatabaseTab.
+     DataGrid — tabela z kolumnami, część kolumn Collapsed
+       (dynamicznie pokazywane/ukrywane w code-behind: UpdateViewMode).
+     DATA BINDING — {Binding Name}, {Binding CaloriesPer100g} itd.
+     DataTrigger — placeholder w SearchBox znika gdy Text niepusty.
+     DataTemplate w kolumnie Akcje — przyciski Edytuj/Usuń per wiersz.
+     =================================================================== -->
 <UserControl x:Class="MonitorBilansuKalorycznego.View.FoodDatabaseView"
              xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
@@ -7,6 +19,7 @@
              Background="#F5F6FA" d:DesignHeight="600" d:DesignWidth="900">
 
     <UserControl.Resources>
+        <!-- STYL z ControlTemplate — pełna kontrola nad wyglądem RadioButton -->
         <Style x:Key="TabRadioStyle" TargetType="RadioButton">
             <Setter Property="FontSize" Value="14"/>
             <Setter Property="FontWeight" Value="SemiBold"/>
@@ -110,7 +123,11 @@
                 </Grid>
             </Border>
 
-            <!-- Data table -->
+            <!-- Tabela danych — DataGrid z ręcznie zdefiniowanymi kolumnami.
+                 Kolumny Products (ColKcalProd, ColProt, ColCarbs, ColFat),
+                 Activities (ColKcalAct), MealSets (ColSetItems, ColSetCalories)
+                 są przełączane w code-behind przez Visibility.
+                 DataGridTemplateColumn "Akcje" — DataTemplate z przyciskami Edit/Delete. -->
             <Border Style="{StaticResource CardStyle}" Padding="0">
                 <DataGrid x:Name="ItemsGrid" AutoGenerateColumns="False" CanUserAddRows="False"
                           IsReadOnly="True" HeadersVisibility="Column" Background="White" RowHeight="52"

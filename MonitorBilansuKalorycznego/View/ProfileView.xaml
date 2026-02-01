@@ -1,8 +1,21 @@
+<!-- ===================================================================
+     ProfileView.xaml — widok profilu użytkownika (dane osobowe + cel kaloryczny).
+     ZASOBY — trzy style wielokrotnego użytku:
+       CardStyle (Border z cieniem), FieldLabel (TextBlock etykiety),
+       ModernTextBox (TextBox z ControlTemplate + Trigger na IsFocused),
+       ModernComboBox (ComboBox).
+     ControlTemplate — pełna kontrola nad wyglądem TextBox (zaokrąglone rogi,
+       zmiana koloru ramki po kliknięciu — Trigger IsFocused).
+     UKŁAD — Grid 2 kolumny: lewa=formularz, prawa=wynik celu.
+     ZDARZENIA — Click="BtnSave_Click", Click="BtnCustomGoal_Click"
+       obsługiwane w code-behind (ProfileView.xaml.cs).
+     =================================================================== -->
 <UserControl x:Class="MonitorBilansuKalorycznego.View.ProfileView"
              xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              Background="#F5F6FA">
 
+    <!-- STYLE — definiowane raz, używane wielokrotnie w całym widoku -->
     <UserControl.Resources>
         <Style x:Key="CardStyle" TargetType="Border">
             <Setter Property="Background" Value="White"/>

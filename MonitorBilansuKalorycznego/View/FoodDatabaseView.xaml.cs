@@ -6,8 +6,15 @@ using MonitorBilansuKalorycznego.Model;
 
 namespace MonitorBilansuKalorycznego.View
 {
+    // Enum do przełączania zakładek w bazie danych
     public enum DatabaseTab { Products, Activities, MealSets }
 
+    // =====================================================================
+    // FoodDatabaseView — widok bazy danych (produkty, aktywności, zestawy dań).
+    // DZIEDZICZENIE — dziedziczy po UserControl (WPF).
+    // Trzy zakładki (RadioButton) przełączają tryb wyświetlania (enum DatabaseTab).
+    // CRUD: dodawanie, edycja, usuwanie — okna dialogowe (ShowDialog).
+    // =====================================================================
     public partial class FoodDatabaseView : UserControl
     {
         private ApplicationData _appData;
@@ -20,6 +27,7 @@ namespace MonitorBilansuKalorycznego.View
             RefreshList();
         }
 
+        // ZDARZENIA WPF — handlery Checked przypisane w XAML do RadioButton
         private void Tab_Products_Checked(object sender, RoutedEventArgs e)
         {
             _currentTab = DatabaseTab.Products;
@@ -41,12 +49,13 @@ namespace MonitorBilansuKalorycznego.View
             RefreshList();
         }
 
+        // Przełącza widoczność kolumn i zmienia napisy w zależności od aktywnej zakładki
         private void UpdateViewMode()
         {
             if (ColKcalProd == null || ColProt == null || TxtHeaderTitle == null)
                 return;
 
-            // Hide all optional columns first
+            // Ukryj wszystkie opcjonalne kolumny
             ColKcalProd.Visibility = Visibility.Collapsed;
             ColProt.Visibility = Visibility.Collapsed;
             ColCarbs.Visibility = Visibility.Collapsed;
@@ -55,6 +64,7 @@ namespace MonitorBilansuKalorycznego.View
             ColSetItems.Visibility = Visibility.Collapsed;
             ColSetCalories.Visibility = Visibility.Collapsed;
 
+            // SWITCH na enum — pokaż odpowiednie kolumny i teksty
             switch (_currentTab)
             {
                 case DatabaseTab.Products:
@@ -84,6 +94,7 @@ namespace MonitorBilansuKalorycznego.View
             }
         }
 
+        // Filtrowanie listy wg wpisanej frazy (SearchBox) — LINQ + DELEGAT Func<T,bool>
         private void RefreshList()
         {
             if (SearchBox == null || _appData == null) return;
@@ -92,6 +103,7 @@ namespace MonitorBilansuKalorycznego.View
             switch (_currentTab)
             {
                 case DatabaseTab.Products:
+                    // DELEGAT Func<T, bool> przekazywany do generycznej metody Find<T>()
                     ItemsGrid.ItemsSource = _appData.FoodManager.Find(p => p.Name.ToLower().Contains(query));
                     break;
                 case DatabaseTab.Activities:
@@ -105,6 +117,7 @@ namespace MonitorBilansuKalorycznego.View
 
         private void SearchBox_TextChanged(object sender, TextChangedEventArgs e) => RefreshList();
 
+        // DODAWANIE — otwiera odpowiednie okno dialogowe w zależności od zakładki
         private void BtnAdd_Click(object sender, RoutedEventArgs e)
         {
             switch (_currentTab)
@@ -114,7 +127,7 @@ namespace MonitorBilansuKalorycznego.View
                     var addWindow = new AddProductWindow();
                     if (addWindow.ShowDialog() == true)
                     {
-                        _appData.FoodManager.Add(addWindow.NewProduct);
+                        _appData.FoodManager.Add(addWindow.NewProduct);  // Wywołuje ZDARZENIE DataChanged
                         RefreshList();
                     }
                     break;
@@ -142,6 +155,7 @@ namespace MonitorBilansuKalorycznego.View
             }
         }
 
+        // EDYCJA — otwiera okno w trybie edycji (przekazuje istniejący obiekt)
         private void BtnEdit_Click(object sender, RoutedEventArgs e)
         {
             switch (_currentTab)
@@ -150,10 +164,10 @@ namespace MonitorBilansuKalorycznego.View
                 {
                     var product = ((Button)sender).DataContext as FoodProduct;
                     if (product == null) return;
-                    var editWindow = new AddProductWindow(product);
+                    var editWindow = new AddProductWindow(product);  // Przeciążony konstruktor (edycja)
                     if (editWindow.ShowDialog() == true)
                     {
-                        _appData.FoodManager.SaveToFile();
+                        _appData.FoodManager.SaveToFile();  // SERIALIZACJA
                         RefreshList();
                     }
                     break;
@@ -185,6 +199,7 @@ namespace MonitorBilansuKalorycznego.View
             }
         }
 
+        // USUWANIE — z potwierdzeniem (MessageBox YesNo)
         private void BtnDelete_Click(object sender, RoutedEventArgs e)
         {
             if (MessageBox.Show("Czy na pewno usunąć?", "Potwierdzenie", MessageBoxButton.YesNo) == MessageBoxResult.No) return;

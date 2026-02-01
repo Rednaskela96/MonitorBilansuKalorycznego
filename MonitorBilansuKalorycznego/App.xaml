@@ -1,9 +1,15 @@
-﻿<Application x:Class="MonitorBilansuKalorycznego.App"
+<!-- ===================================================================
+     App.xaml — punkt wejścia aplikacji WPF.
+     StartupUri="MainWindow.xaml" — wskazuje główne okno do uruchomienia.
+     Application.Resources — miejsce na globalne style/zasoby (obecnie puste).
+     Klasa App DZIEDZICZY po System.Windows.Application (DZIEDZICZENIE WPF).
+     =================================================================== -->
+<Application x:Class="MonitorBilansuKalorycznego.App"
              xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:local="clr-namespace:MonitorBilansuKalorycznego"
              StartupUri="MainWindow.xaml">
     <Application.Resources>
-         
+
     </Application.Resources>
 </Application>

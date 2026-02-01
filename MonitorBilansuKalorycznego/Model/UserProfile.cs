@@ -1,29 +1,24 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace MonitorBilansuKalorycznego.Model
 {
+    // UserProfile — profil użytkownika z danymi osobowymi i logiką obliczeniową.
+    // Używa ENUM-ów (Gender, ActivityLevel) do typowania danych.
     public class UserProfile
     {
         public string Name { get; set; } = "Użytkownik";
         public int Age { get; set; }
-        public double Weight { get; set; } // w kg
-        public double Height { get; set; } // w cm
+        public double Weight { get; set; }   // w kg
+        public double Height { get; set; }   // w cm
         public Gender Gender { get; set; }
         public ActivityLevel ActivityLevel { get; set; }
 
-        // Cel ręczny (np. user chce jeść 2000 kcal), jeśli 0 - wyliczymy automatycznie
+        // Cel ręczny (jeśli 0 — wyliczymy automatycznie z BMR/TDEE)
         public double CustomDailyCalorieGoal { get; set; }
 
-        // --- LOGIKA BIZNESOWA ---
-
-        // 1. Obliczanie BMR (Ile organizm spala leżąc i nic nie robiąc)
+        // Obliczanie BMR (Basal Metabolic Rate) — wzór Mifflina-St Jeora
         public double CalculateBMR()
         {
-            // Wzór Mifflina-St Jeora
             double bmr = (10 * Weight) + (6.25 * Height) - (5 * Age);
 
             if (Gender == Gender.Male)
@@ -34,12 +29,13 @@ namespace MonitorBilansuKalorycznego.Model
             return bmr;
         }
 
-        // 2. Obliczanie TDEE (Całkowite zapotrzebowanie z uwzględnieniem aktywności)
+        // Obliczanie TDEE (Total Daily Energy Expenditure) — BMR * mnożnik aktywności
         public double CalculateTDEE()
         {
             double bmr = CalculateBMR();
-            double multiplier = 1.2; // Domyślnie siedzący
+            double multiplier = 1.2;
 
+            //wybór mnożnika na podstawie poziomu aktywności (enum)
             switch (ActivityLevel)
             {
                 case ActivityLevel.Sedentary: multiplier = 1.2; break;
@@ -51,9 +47,10 @@ namespace MonitorBilansuKalorycznego.Model
 
             return Math.Round(bmr * multiplier);
         }
-
+        
         private const double DefaultCalorieGoal = 2000;
 
+        // Zwraca cel kaloryczny: ręczny > automatyczny > domyślny 2000 kcal
         public double GetDailyCalorieGoal()
         {
             if (CustomDailyCalorieGoal > 0)

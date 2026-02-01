@@ -1,27 +1,29 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace MonitorBilansuKalorycznego.Model
 {
-    public class ActivityEntry
+    // Reprezentuje wpis aktywności fizycznej w dzienniku (ćwiczenie + czas trwania).
+    public class ActivityEntry : BaseEntry
     {
-        public Guid Id { get; set; } = Guid.NewGuid();
         public DateTime StartTime { get; set; } = DateTime.Now;
 
-        // Powiązanie z definicją aktywności
+        //ActivityEntry posiada referencję do PhysicalActivity
         public PhysicalActivity Activity { get; set; } = new PhysicalActivity();
 
-        // Czas trwania
+        // Czas trwania ćwiczenia (typ TimeSpan — wbudowany typ .NET)
         public TimeSpan Duration { get; set; }
 
-        public double CalculateCaloriesBurned()
+        // OVERRIDE metody abstrakcyjnej — inny sposób obliczania kalorii niż w MealEntry = POLIMORFIZM
+        public override double CalculateCalories()
         {
             if (Activity == null) return 0;
             return Activity.CalculateCaloriesBurned(Duration);
         }
-        public double CaloriesDisplay => CalculateCaloriesBurned();
+
+        // OVERRIDE metody wirtualnej — opis aktywności z czasem trwania
+        public override string GetSummary()
+            => $"{Activity.Name} — {Duration.TotalMinutes:N0} min ({CalculateCalories():N0} kcal)";
+
+        public double CaloriesDisplay => CalculateCalories();
     }
 }

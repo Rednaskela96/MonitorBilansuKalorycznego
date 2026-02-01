@@ -1,10 +1,19 @@
-﻿<Window x:Class="MonitorBilansuKalorycznego.MainWindow"
+<!-- ===================================================================
+     MainWindow.xaml — główne okno aplikacji OloFit.
+     ZASOBY XAML (Window.Resources) — styl "MenuButton" z Triggerem (IsMouseOver).
+     UKŁAD — Grid z 2 wierszami: pasek nawigacji (Row=0) + ContentControl (Row=1).
+     ContentControl (ActiveView) — dynamicznie podmienia zawartość (widoki).
+     DATA BINDING w XAML — Style, Trigger, DropShadowEffect.
+     =================================================================== -->
+<Window x:Class="MonitorBilansuKalorycznego.MainWindow"
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         Title="Monitor Bilansu Kalorycznego" Height="700" Width="1100"
         WindowStartupLocation="CenterScreen" Background="#F5F6FA">
 
+    <!-- ZASOBY OKNA — wielokrotnie używany styl przycisków menu (DRY) -->
     <Window.Resources>
+        <!-- Style z Triggerem — zmiana koloru przy najechaniu myszką -->
         <Style TargetType="Button" x:Key="MenuButton">
             <Setter Property="Background" Value="Transparent"/>
             <Setter Property="BorderThickness" Value="0"/>
@@ -15,6 +24,7 @@
             <Setter Property="Padding" Value="10,5"/>
             <Setter Property="Cursor" Value="Hand"/>
             <Style.Triggers>
+                <!-- TRIGGER — automatyczna zmiana właściwości na podstawie warunku -->
                 <Trigger Property="IsMouseOver" Value="True">
                     <Setter Property="Foreground" Value="#2ECC71"/>
                 </Trigger>
@@ -22,6 +32,7 @@
         </Style>
     </Window.Resources>
 
+    <!-- GRID — główny kontener z definicjami wierszy -->
     <Grid>
         <Grid.RowDefinitions>
             <RowDefinition Height="60"/>
@@ -70,6 +81,9 @@
             </Grid>
         </Border>
 
+        <!-- CONTENTCONTROL — kontener na dynamicznie ładowane widoki (UserControl).
+             W code-behind: ActiveView.Content = new DailyLogView(...) itp.
+             Wzorzec nawigacji: podmiana Content zamiast Frame/Page. -->
         <ContentControl x:Name="ActiveView" Grid.Row="1" Margin="20"/>
     </Grid>
 </Window>

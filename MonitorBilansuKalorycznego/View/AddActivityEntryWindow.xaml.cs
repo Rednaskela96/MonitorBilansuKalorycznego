@@ -6,20 +6,28 @@ using MonitorBilansuKalorycznego.Model;
 
 namespace MonitorBilansuKalorycznego.View
 {
+    // =====================================================================
+    // AddActivityEntryWindow — okno dialogowe dodawania wpisu aktywności do dziennika.
+    // Wybiera aktywność z listy (ComboBox) + czas trwania w minutach.
+    // LINQ — FirstOrDefault() do wyszukiwania aktywności po Id w trybie edycji.
+    // =====================================================================
     public partial class AddActivityEntryWindow : Window
     {
         public ActivityEntry ResultEntry { get; private set; } = null!;
 
+        // Konstruktor — tryb dodawania
         public AddActivityEntryWindow(List<PhysicalActivity> availableActivities)
         {
             InitializeComponent();
-            ComboActivities.ItemsSource = availableActivities;
+            ComboActivities.ItemsSource = availableActivities;  // Data Binding w code-behind
         }
 
+        // Konstruktor — tryb edycji (przeciążenie)
         public AddActivityEntryWindow(List<PhysicalActivity> availableActivities, ActivityEntry existing)
         {
             InitializeComponent();
             ComboActivities.ItemsSource = availableActivities;
+            // LINQ FirstOrDefault() — wyszukanie aktywności po Id
             ComboActivities.SelectedItem = availableActivities.FirstOrDefault(a => a.Id == existing.Activity.Id);
             InputDuration.Text = existing.Duration.TotalMinutes.ToString();
         }
@@ -38,7 +46,7 @@ namespace MonitorBilansuKalorycznego.View
                 ResultEntry = new ActivityEntry
                 {
                     Activity = selected,
-                    Duration = TimeSpan.FromMinutes(minutes),
+                    Duration = TimeSpan.FromMinutes(minutes),  // Konwersja minut na TimeSpan
                     StartTime = DateTime.Now
                 };
                 DialogResult = true;

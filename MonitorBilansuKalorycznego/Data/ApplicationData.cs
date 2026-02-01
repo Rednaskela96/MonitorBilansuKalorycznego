@@ -6,23 +6,29 @@ using MonitorBilansuKalorycznego.Logic;
 
 namespace MonitorBilansuKalorycznego.Data
 {
+    /* ApplicationData — centralny punkt dostępu do danych aplikacji.
+    Zarządza profilem użytkownika i czterema DataManager<T> (TYPY GENERYCZNE).
+    Użyta jest tu serializacja do profilu użytkownika zapisywany/odczytywany z JSONa oraz
+    hermetyzacja do prywatnych pól (_profilePath), publiczne właściwości z private set. */
     public class ApplicationData
     {
         private const string ProfileFileName = "user_profile.json";
+        
         private string _profilePath;
 
         public UserProfile CurrentUser { get; set; } = new UserProfile();
 
+        // Cztery instancje KLASY GENERYCZNEJ DataManager<T> — każda dla innego typu modelu
         public DataManager<FoodProduct> FoodManager { get; private set; }
         public DataManager<PhysicalActivity> ActivityManager { get; private set; }
         public DataManager<DailyLog> LogManager { get; private set; }
         public DataManager<MealSet> MealSetManager { get; private set; }
 
-        // --- KONSTRUKTOR ---
         public ApplicationData()
         {
             _profilePath = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, ProfileFileName);
 
+            // Inicjalizacja managerów — każdy zapisuje dane do osobnego pliku JSON
             FoodManager = new DataManager<FoodProduct>("foods.json");
             ActivityManager = new DataManager<PhysicalActivity>("activities.json");
             LogManager = new DataManager<DailyLog>("logs.json");
@@ -30,16 +36,17 @@ namespace MonitorBilansuKalorycznego.Data
 
             LoadAll();
         }
-        // --- KONIEC KONSTRUKTORA ---
 
+        // zapis wszystkich danych do plików JSON
         public void SaveAll()
         {
             try
             {
+                // SERIALIZACJA profilu użytkownika do JSON
                 string json = JsonConvert.SerializeObject(CurrentUser, Formatting.Indented);
                 File.WriteAllText(_profilePath, json);
             }
-            catch (Exception ex)
+            catch (Exception ex)  // wyjatki
             {
                 System.Windows.MessageBox.Show($"Błąd zapisu profilu: {ex.Message}",
                     "Błąd zapisu", System.Windows.MessageBoxButton.OK, System.Windows.MessageBoxImage.Error);
@@ -51,6 +58,7 @@ namespace MonitorBilansuKalorycznego.Data
             MealSetManager.SaveToFile();
         }
 
+        // DESERIALIZACJA — odczyt wszystkich danych z plików JSON
         public void LoadAll()
         {
             try
@@ -76,9 +84,9 @@ namespace MonitorBilansuKalorycznego.Data
             MealSetManager.LoadFromFile();
         }
 
+        // Generowanie raportu tygodniowego
         public ReportData GetCurrentWeeklyReport()
         {
-            // (używamy CurrentUser zamiast nazwy klasy)
             var reportGenerator = new WeeklyReport(LogManager.Items, CurrentUser.GetDailyCalorieGoal());
             return reportGenerator.GenerateReport();
         }

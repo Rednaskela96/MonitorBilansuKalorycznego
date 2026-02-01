@@ -1,7 +1,15 @@
-﻿<Window x:Class="MonitorBilansuKalorycznego.View.AddActivityEntryWindow"
+<!-- ===================================================================
+     AddActivityEntryWindow.xaml — okno dialogowe dodawania wpisu aktywności do dziennika.
+     FORMULARZ — ComboBox z listą aktywności + czas trwania w minutach.
+     DisplayMemberPath="Name" — ComboBox wyświetla właściwość Name z PhysicalActivity.
+     W code-behind: ComboActivities.ItemsSource = availableActivities (DATA BINDING).
+     Click="BtnAdd_Click" → tworzy ActivityEntry z TimeSpan.FromMinutes().
+     WZORZEC OKNA DIALOGOWEGO — ShowDialog() → DialogResult = true/false.
+     =================================================================== -->
+<Window x:Class="MonitorBilansuKalorycznego.View.AddActivityEntryWindow"
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-        Title="Dodaj aktywność" Height="300" Width="400" 
+        Title="Dodaj aktywność" Height="300" Width="400"
         WindowStartupLocation="CenterScreen" ResizeMode="NoResize" Background="White">
     <Border Padding="20">
         <StackPanel>

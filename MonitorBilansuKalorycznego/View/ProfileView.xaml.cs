@@ -7,6 +7,11 @@ using MonitorBilansuKalorycznego.Model;
 
 namespace MonitorBilansuKalorycznego.View
 {
+    // =====================================================================
+    // ProfileView — widok profilu użytkownika (edycja danych osobowych).
+    // DZIEDZICZENIE — dziedziczy po UserControl (WPF).
+    // REFLEKSJA — Enum.GetValues(typeof(Gender)) ładuje enumy do ComboBox.
+    // =====================================================================
     public partial class ProfileView : UserControl
     {
         private ApplicationData _appData;
@@ -16,13 +21,14 @@ namespace MonitorBilansuKalorycznego.View
             InitializeComponent();
             _appData = appData;
 
-            // Wypełnij ComboBoxy enumami
+            // REFLEKSJA — typeof() pobiera typ, Enum.GetValues() zwraca wszystkie wartości enuma
             ComboGender.ItemsSource = Enum.GetValues(typeof(Gender));
             ComboActivity.ItemsSource = Enum.GetValues(typeof(ActivityLevel));
 
             LoadData();
         }
 
+        // Ładuje dane z modelu UserProfile do kontrolek UI
         private void LoadData()
         {
             var user = _appData.CurrentUser;
@@ -37,6 +43,7 @@ namespace MonitorBilansuKalorycznego.View
             UpdateResultText();
         }
 
+        // Handler przycisku "Zapisz" — walidacja + zapis danych
         private void BtnSave_Click(object sender, RoutedEventArgs e)
         {
             try
@@ -44,6 +51,8 @@ namespace MonitorBilansuKalorycznego.View
                 var user = _appData.CurrentUser;
                 user.Name = InputName.Text;
                 user.Age = int.Parse(InputAge.Text);
+
+                // CultureInfo.InvariantCulture — parsowanie niezależne od lokalizacji systemu
                 user.Weight = double.Parse(InputWeight.Text.Replace(",", "."), CultureInfo.InvariantCulture);
                 user.Height = double.Parse(InputHeight.Text.Replace(",", "."), CultureInfo.InvariantCulture);
 
@@ -53,21 +62,21 @@ namespace MonitorBilansuKalorycznego.View
                     return;
                 }
 
+                // Rzutowanie SelectedItem na typ enum
                 if (ComboGender.SelectedItem != null)
                     user.Gender = (Gender)ComboGender.SelectedItem;
 
                 if (ComboActivity.SelectedItem != null)
                     user.ActivityLevel = (ActivityLevel)ComboActivity.SelectedItem;
 
-                // Reset ręcznego celu przy przeliczaniu automatycznym
                 user.CustomDailyCalorieGoal = 0;
                 InputCustomGoal.Text = "0";
 
-                _appData.SaveAll();
+                _appData.SaveAll();  // SERIALIZACJA — zapis do pliku JSON
                 UpdateResultText();
                 MessageBox.Show("Profil zaktualizowany!");
             }
-            catch
+            catch  // PRZECHWYTYWANIE WYJĄTKÓW
             {
                 MessageBox.Show("Sprawdź poprawność danych (tylko liczby)!");
             }

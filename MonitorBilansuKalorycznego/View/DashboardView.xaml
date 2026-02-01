@@ -1,3 +1,17 @@
+<!-- ===================================================================
+     DashboardView.xaml — widok statystyk i wykresów.
+     IMPORT NAMESPACE — xmlns:lvc importuje LiveChartsCore.SkiaSharpView.WPF
+       (zewnętrzna biblioteka do wykresów).
+     KONTROLKI LiveCharts2:
+       lvc:PieChart (PieChartBalance) — wykres donut (dzisiejszy bilans).
+       lvc:CartesianChart (ChartTrend) — wykres liniowy (trend roczny).
+     UKŁAD — ScrollViewer > StackPanel z kartami (Border + CardStyle):
+       Karta 1: Dzisiejszy bilans + PieChart
+       Karta 2: Wykres tygodniowy (ręczne Border jako słupki)
+       Karta 3: Raport miesięczny (średnia, streak, dni na celu)
+       Karta 4: Trend roczny (CartesianChart — linia)
+     x:Name — nazwy kontrolek dostępne w code-behind (np. TxtBalanceValue).
+     =================================================================== -->
 <UserControl x:Class="MonitorBilansuKalorycznego.View.DashboardView"
              xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"

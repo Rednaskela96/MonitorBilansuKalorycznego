@@ -2,45 +2,50 @@
 using System.Collections.Generic;
 using System.Linq;
 using MonitorBilansuKalorycznego.Model;
-using MonitorBilansuKalorycznego.Interfaces;
 
 namespace MonitorBilansuKalorycznego.Logic
 {
+    /*StatisticsCalculator — klasa statyczna z metodami obliczeniowymi.
+    użycie LINQ: Average, Sum, Count, Where, OrderBy, Take, Skip.*/
     public static class StatisticsCalculator
     {
-        // Oblicz średnią spożytych kalorii z listy dni
+        // LINQ Average() — średnia spożytych kalorii
         public static double CalculateAverageConsumed(List<DailyLog> logs)
         {
             if (logs == null || !logs.Any()) return 0;
             return logs.Average(l => l.GetTotalCaloriesConsumed());
         }
 
-        // Oblicz średnią spalonych kalorii
+        // LINQ Average() — średnia spalonych kalorii
         public static double CalculateAverageBurned(List<DailyLog> logs)
         {
             if (logs == null || !logs.Any()) return 0;
             return logs.Average(l => l.GetTotalCaloriesBurned());
         }
 
-        // Oblicz sumę kalorii (np. dla tygodnia)
+        // LINQ Sum() — suma spożytych kalorii
         public static double CalculateTotalConsumed(List<DailyLog> logs)
         {
             if (logs == null || !logs.Any()) return 0;
             return logs.Sum(l => l.GetTotalCaloriesConsumed());
         }
 
+        // LINQ Sum() — suma spalonych kalorii
         public static double CalculateTotalBurned(List<DailyLog> logs)
         {
             if (logs == null || !logs.Any()) return 0;
             return logs.Sum(l => l.GetTotalCaloriesBurned());
         }
 
+        // LINQ Count() z predykatem — ile dni bilans <= cel
         public static int GetDaysOnGoal(List<DailyLog> logs, double dailyGoal)
         {
             if (logs == null || !logs.Any()) return 0;
             return logs.Count(l => l.CalculateCalories() <= dailyGoal);
         }
 
+        // Algorytm streak — ciągła seria dni "na celu" licząc od dziś wstecz
+        // LINQ OrderByDescending() — sortowanie malejące po dacie
         public static int GetCurrentStreak(List<DailyLog> allLogs, double dailyGoal)
         {
             if (allLogs == null || !allLogs.Any()) return 0;
@@ -60,6 +65,7 @@ namespace MonitorBilansuKalorycznego.Logic
             return streak;
         }
 
+        // LINQ Where() + OrderBy() — filtrowanie logów za ostatnie N dni
         public static List<DailyLog> GetLogsForPeriod(List<DailyLog> allLogs, int days)
         {
             if (allLogs == null) return new List<DailyLog>();
@@ -68,21 +74,6 @@ namespace MonitorBilansuKalorycznego.Logic
                 .Where(l => l.Date.Date >= startDate.Date && l.Date.Date <= DateTime.Today)
                 .OrderBy(l => l.Date)
                 .ToList();
-        }
-
-        // Wykrywanie trendu (czy użytkownik je coraz więcej, czy mniej)
-        public static string GetTrend(List<DailyLog> logs)
-        {
-            if (logs == null || logs.Count < 2) return "Brak danych";
-
-            // Porównujemy średnią z pierwszej połowy okresu do drugiej
-            int mid = logs.Count / 2;
-            var firstHalf = logs.Take(mid).Average(l => l.CalculateCalories());
-            var secondHalf = logs.Skip(mid).Average(l => l.CalculateCalories());
-
-            if (secondHalf > firstHalf) return "Rosnący"; // Nadwyżka rośnie
-            if (secondHalf < firstHalf) return "Malejący"; // Deficyt się pogłębia
-            return "Stabilny";
         }
     }
 }

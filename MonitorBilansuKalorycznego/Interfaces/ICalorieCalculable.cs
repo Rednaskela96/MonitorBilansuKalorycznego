@@ -1,11 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace MonitorBilansuKalorycznego.Interfaces
+﻿namespace MonitorBilansuKalorycznego.Interfaces
 {
+    //interfejs z metoda dla obiektow ktora maja obliczac kalorie
     public interface ICalorieCalculable
     {
         double CalculateCalories();

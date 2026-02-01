@@ -1,26 +1,38 @@
 ﻿using System;
 using System.Windows;
+using MonitorBilansuKalorycznego.Exceptions;
 using MonitorBilansuKalorycznego.Model;
 
 namespace MonitorBilansuKalorycznego.View
 {
+    // =====================================================================
+    // AddProductWindow — okno dialogowe do dodawania/edycji produktu spożywczego.
+    // WŁASNY WYJĄTEK — throw new ValidationException(...) w walidacji pól.
+    // PRZECHWYTYWANIE WYJĄTKÓW — catch (ValidationException ex) + catch (Exception).
+    // Wzorzec okna dialogowego: ShowDialog() → DialogResult = true/false.
+    // =====================================================================
     public partial class AddProductWindow : Window
     {
         public FoodProduct NewProduct { get; private set; } = null!;
+
+        // HERMETYZACJA — prywatne pole readonly (ustawiane tylko w konstruktorze)
         private readonly bool _isEditMode;
 
+        // Konstruktor do DODAWANIA nowego produktu
         public AddProductWindow()
         {
             InitializeComponent();
             _isEditMode = false;
         }
 
+        // Konstruktor do EDYCJI istniejącego produktu (przeciążenie konstruktora)
         public AddProductWindow(FoodProduct existing)
         {
             InitializeComponent();
             _isEditMode = true;
             NewProduct = existing;
 
+            // Wypełnienie pól danymi istniejącego produktu
             InputName.Text = existing.Name;
             InputKcal.Text = existing.CaloriesPer100g.ToString();
             InputProtein.Text = existing.Protein.ToString();
@@ -31,49 +43,63 @@ namespace MonitorBilansuKalorycznego.View
 
         private void BtnSave_Click(object sender, RoutedEventArgs e)
         {
-            if (string.IsNullOrWhiteSpace(InputName.Text))
-            {
-                MessageBox.Show("Podaj nazwę produktu!");
-                return;
-            }
-
             try
             {
+                // RZUCANIE WŁASNEGO WYJĄTKU — throw new ValidationException(...)
+                if (string.IsNullOrWhiteSpace(InputName.Text))
+                    throw new ValidationException("Name", "Podaj nazwę produktu!");
+
+                double kcal = ParseField(InputKcal.Text, "Kalorie");
+                double protein = ParseField(InputProtein.Text, "Białko");
+                double carbs = ParseField(InputCarbs.Text, "Węglowodany");
+                double fat = ParseField(InputFat.Text, "Tłuszcze");
+
+                if (kcal < 0)
+                    throw new ValidationException("CaloriesPer100g", "Kalorie nie mogą być ujemne!");
+
                 if (_isEditMode)
                 {
+                    // Tryb edycji — modyfikacja istniejącego obiektu (ta sama referencja)
                     NewProduct.Name = InputName.Text;
                     NewProduct.Category = InputCategory.Text;
-                    NewProduct.CaloriesPer100g = double.Parse(InputKcal.Text);
-                    NewProduct.Protein = double.Parse(InputProtein.Text);
-                    NewProduct.Carbs = double.Parse(InputCarbs.Text);
-                    NewProduct.Fat = double.Parse(InputFat.Text);
+                    NewProduct.CaloriesPer100g = kcal;
+                    NewProduct.Protein = protein;
+                    NewProduct.Carbs = carbs;
+                    NewProduct.Fat = fat;
                 }
                 else
                 {
+                    // Tryb dodawania — tworzenie nowego obiektu
                     NewProduct = new FoodProduct
                     {
                         Name = InputName.Text,
                         Category = InputCategory.Text,
-                        CaloriesPer100g = double.Parse(InputKcal.Text),
-                        Protein = double.Parse(InputProtein.Text),
-                        Carbs = double.Parse(InputCarbs.Text),
-                        Fat = double.Parse(InputFat.Text)
+                        CaloriesPer100g = kcal,
+                        Protein = protein,
+                        Carbs = carbs,
+                        Fat = fat
                     };
-                }
-
-                if (!NewProduct.Validate())
-                {
-                    MessageBox.Show("Dane produktu są niepoprawne! Kalorie nie mogą być ujemne.");
-                    return;
                 }
 
                 DialogResult = true;
                 Close();
             }
-            catch
+            catch (ValidationException ex)  // <-- PRZECHWYTYWANIE WŁASNEGO WYJĄTKU
+            {
+                MessageBox.Show(ex.Message, "Błąd walidacji", MessageBoxButton.OK, MessageBoxImage.Warning);
+            }
+            catch (Exception)  // <-- PRZECHWYTYWANIE WYJĄTKU OGÓLNEGO
             {
                 MessageBox.Show("Wpisz poprawne liczby w polach wartości!");
             }
+        }
+
+        // Metoda pomocnicza — parsuje tekst na double, rzuca ValidationException przy błędzie
+        private double ParseField(string text, string fieldName)
+        {
+            if (!double.TryParse(text, out double value))
+                throw new ValidationException(fieldName, $"Pole \"{fieldName}\" musi zawierać poprawną liczbę!");
+            return value;
         }
     }
 }

@@ -1,65 +1,47 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using MonitorBilansuKalorycznego.Interfaces;
 
 namespace MonitorBilansuKalorycznego.Model
 {
+    // IMPLEMENTACJA INTERFEJSU — DailyLog implementuje ICalorieCalculable.
     public class DailyLog : ICalorieCalculable
     {
         public Guid Id { get; set; } = Guid.NewGuid();
         public DateTime Date { get; set; } = DateTime.Today;
 
-        // Listy wpisów (posiłki i aktywności)
+        // KOLEKCJE GENERYCZNE — List<T> przechowujące wpisy posiłków i aktywności
         public List<MealEntry> Meals { get; set; } = new List<MealEntry>();
         public List<ActivityEntry> Activities { get; set; } = new List<ActivityEntry>();
 
         public string Notes { get; set; } = string.Empty;
 
-        // Metody zarządzające listami (zgodnie z diagramem klas)
-        public void AddMeal(MealEntry meal)
-        {
-            Meals.Add(meal);
-        }
+        // Metody zarządzające kolekcjami (dodawanie/usuwanie elementów)
+        public void AddMeal(MealEntry meal) => Meals.Add(meal);
+        public void RemoveMeal(MealEntry meal) => Meals.Remove(meal);
+        public void AddActivity(ActivityEntry activity) => Activities.Add(activity);
+        public void RemoveActivity(ActivityEntry activity) => Activities.Remove(activity);
 
-        public void RemoveMeal(MealEntry meal)
-        {
-            Meals.Remove(meal);
-        }
-
-        public void AddActivity(ActivityEntry activity)
-        {
-            Activities.Add(activity);
-        }
-
-        public void RemoveActivity(ActivityEntry activity)
-        {
-            Activities.Remove(activity);
-        }
-
-        // --- LOGIKA BIZNESOWA (OBLICZENIA) ---
-
-        // 1. Ile zjedliśmy łącznie?
+        // LINQ Sum() — sumuje kalorie ze wszystkich posiłków
         public double GetTotalCaloriesConsumed()
         {
-            return Meals.Sum(m => m.CalculateCalories());
+            return Meals.Sum(m => m.CalculateCalories());  // <-- LINQ + POLIMORFIZM (wywołanie override)
         }
 
-        // 2. Ile spaliliśmy łącznie (ćwiczenia)?
+        // LINQ Sum() — sumuje spalone kalorie ze wszystkich aktywności
         public double GetTotalCaloriesBurned()
         {
-            return Activities.Sum(a => a.CalculateCaloriesBurned());
+            return Activities.Sum(a => a.CalculateCalories());  // <-- POLIMORFIZM (inna implementacja override)
         }
 
-        // 3. Bilans netto (Zjedzone - Spalone)
+        // Implementacja interfejsu ICalorieCalculable — bilans netto
         public double CalculateCalories()
         {
             return GetTotalCaloriesConsumed() - GetTotalCaloriesBurned();
         }
 
-        // 4. Ile pozostało do celu? (Cel przekazujemy jako parametr, bo jest w UserProfile)
+        // Ile kalorii pozostało do celu dziennego?
         public double GetRemainingCalories(double dailyGoal)
         {
             return dailyGoal - CalculateCalories();
