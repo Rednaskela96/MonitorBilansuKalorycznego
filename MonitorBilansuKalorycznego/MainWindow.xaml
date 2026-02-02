@@ -44,7 +44,7 @@
                     <ColumnDefinition Width="Auto"/>
                 </Grid.ColumnDefinitions>
 
-                <TextBlock Text="OloFit" FontSize="24" FontWeight="Bold" VerticalAlignment="Center" Foreground="Black"/>
+                <TextBlock Text="Monitor Bilansu Kalorycznego" FontSize="24" FontWeight="Bold" VerticalAlignment="Center" Foreground="Black"/>
 
                 <StackPanel Grid.Column="1" Orientation="Horizontal" HorizontalAlignment="Center" VerticalAlignment="Center">
                     <Button x:Name="BtnNavDashboard" Click="Nav_Dashboard_Click" Style="{StaticResource MenuButton}">

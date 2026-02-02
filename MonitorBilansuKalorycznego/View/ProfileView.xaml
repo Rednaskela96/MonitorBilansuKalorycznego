@@ -145,6 +145,23 @@
                                 </Button>
                             </StackPanel>
                         </Border>
+
+                        <!-- Sekcja resetowania danych -->
+                        <Border BorderBrush="#F0F0F0" BorderThickness="0,1,0,0" Padding="0,25,0,0" Margin="0,25,0,0">
+                            <StackPanel>
+                                <TextBlock Text="Strefa niebezpieczna" FontSize="12" Foreground="#E74C3C" FontWeight="SemiBold" Margin="0,0,0,8"/>
+                                <TextBlock Text="Ta operacja usunie wszystkie dane i przywroci aplikacje do stanu poczatkowego." 
+                                           FontSize="11" Foreground="#999" TextWrapping="Wrap" Margin="0,0,0,12"/>
+                                <Button Content="Wyzeruj baze danych" Click="BtnResetDatabase_Click" Height="38"
+                                        Background="#E74C3C" BorderThickness="0" Foreground="White" FontWeight="SemiBold" FontSize="13" Cursor="Hand">
+                                    <Button.Resources>
+                                        <Style TargetType="Border">
+                                            <Setter Property="CornerRadius" Value="8"/>
+                                        </Style>
+                                    </Button.Resources>
+                                </Button>
+                            </StackPanel>
+                        </Border>
                     </StackPanel>
                 </Border>
             </Grid>

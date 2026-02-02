@@ -91,5 +91,30 @@ namespace MonitorBilansuKalorycznego.View
         {
             TxtResultGoal.Text = $"{_appData.CurrentUser.GetDailyCalorieGoal()} kcal";
         }
+
+        // Handler przycisku resetowania bazy danych
+        private void BtnResetDatabase_Click(object sender, RoutedEventArgs e)
+        {
+            var result = MessageBox.Show(
+                "Czy na pewno chcesz wyzerować całą bazę danych?\n\n" +
+                "Ta operacja usunie:\n" +
+                "• Wszystkie produkty\n" +
+                "• Wszystkie aktywności\n" +
+                "• Wszystkie zestawy dań\n" +
+                "• Całą historię dziennika\n" +
+                "• Dane profilu użytkownika\n\n" +
+                "Tej operacji nie można cofnąć!",
+                "Potwierdzenie resetowania",
+                MessageBoxButton.YesNo,
+                MessageBoxImage.Warning);
+
+            if (result == MessageBoxResult.Yes)
+            {
+                _appData.ResetAll();
+                LoadData();
+                MessageBox.Show("Baza danych została wyzerowana.", "Sukces", 
+                    MessageBoxButton.OK, MessageBoxImage.Information);
+            }
+        }
     }
 }

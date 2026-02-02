@@ -90,5 +90,21 @@ namespace MonitorBilansuKalorycznego.Data
             var reportGenerator = new WeeklyReport(LogManager.Items, CurrentUser.GetDailyCalorieGoal());
             return reportGenerator.GenerateReport();
         }
+
+        // Resetowanie całej bazy danych do stanu początkowego
+        public void ResetAll()
+        {
+            // Reset profilu użytkownika
+            CurrentUser = new UserProfile();
+
+            // Wyczyszczenie wszystkich kolekcji
+            FoodManager.Items.Clear();
+            ActivityManager.Items.Clear();
+            LogManager.Items.Clear();
+            MealSetManager.Items.Clear();
+
+            // Zapis pustych danych do plików
+            SaveAll();
+        }
     }
 }
