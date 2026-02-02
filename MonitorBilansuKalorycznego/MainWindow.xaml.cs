@@ -5,14 +5,8 @@ using MonitorBilansuKalorycznego.View;
 
 namespace MonitorBilansuKalorycznego
 {
-    // =====================================================================
-    // MainWindow — główne okno aplikacji z nawigacją (sidebar).
-    // DZIEDZICZENIE — dziedziczy po WPF Window (klasa bazowa frameworka).
-    // Tworzy ApplicationData (centralny obiekt danych) i przekazuje go do widoków.
-    // =====================================================================
     public partial class MainWindow : Window
     {
-        // HERMETYZACJA — prywatne pole przechowujące dane aplikacji
         private ApplicationData _appData;
 
         public MainWindow()
@@ -24,7 +18,7 @@ namespace MonitorBilansuKalorycznego
             OpenDashboard();
         }
 
-        // ZDARZENIA WPF — handlery przypisane do przycisków w XAML (Click="...")
+        // ZDARZENIA WPF — handlery przypisane do przycisków
         private void Nav_Dashboard_Click(object sender, RoutedEventArgs e) => OpenDashboard();
         private void Nav_Database_Click(object sender, RoutedEventArgs e) => OpenDatabase();
         private void Nav_Journal_Click(object sender, RoutedEventArgs e)

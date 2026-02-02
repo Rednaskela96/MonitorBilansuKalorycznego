@@ -5,17 +5,10 @@ using MonitorBilansuKalorycznego.Model;
 
 namespace MonitorBilansuKalorycznego.View
 {
-    // =====================================================================
-    // AddProductWindow — okno dialogowe do dodawania/edycji produktu spożywczego.
-    // WŁASNY WYJĄTEK — throw new ValidationException(...) w walidacji pól.
-    // PRZECHWYTYWANIE WYJĄTKÓW — catch (ValidationException ex) + catch (Exception).
-    // Wzorzec okna dialogowego: ShowDialog() → DialogResult = true/false.
-    // =====================================================================
     public partial class AddProductWindow : Window
     {
         public FoodProduct NewProduct { get; private set; } = null!;
-
-        // HERMETYZACJA — prywatne pole readonly (ustawiane tylko w konstruktorze)
+        
         private readonly bool _isEditMode;
 
         // Konstruktor do DODAWANIA nowego produktu
@@ -45,7 +38,6 @@ namespace MonitorBilansuKalorycznego.View
         {
             try
             {
-                // RZUCANIE WŁASNEGO WYJĄTKU — throw new ValidationException(...)
                 if (string.IsNullOrWhiteSpace(InputName.Text))
                     throw new ValidationException("Name", "Podaj nazwę produktu!");
 
@@ -84,11 +76,11 @@ namespace MonitorBilansuKalorycznego.View
                 DialogResult = true;
                 Close();
             }
-            catch (ValidationException ex)  // <-- PRZECHWYTYWANIE WŁASNEGO WYJĄTKU
+            catch (ValidationException ex)
             {
                 MessageBox.Show(ex.Message, "Błąd walidacji", MessageBoxButton.OK, MessageBoxImage.Warning);
             }
-            catch (Exception)  // <-- PRZECHWYTYWANIE WYJĄTKU OGÓLNEGO
+            catch (Exception)
             {
                 MessageBox.Show("Wpisz poprawne liczby w polach wartości!");
             }

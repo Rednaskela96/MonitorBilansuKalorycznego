@@ -6,17 +6,11 @@ using MonitorBilansuKalorycznego.Model;
 
 namespace MonitorBilansuKalorycznego.View
 {
-    // =====================================================================
-    // AddMealSetWindow — okno dialogowe tworzenia/edycji zestawu dań.
-    // KOLEKCJE — List<MealSetItem> przechowuje elementy zestawu.
-    // LINQ — Sum() do obliczania łącznych kalorii zestawu.
-    // Wzorzec okna dialogowego z dynamiczną listą elementów.
-    // =====================================================================
     public partial class AddMealSetWindow : Window
     {
         public MealSet ResultSet { get; private set; } = new MealSet();
 
-        // KOLEKCJA — prywatna lista elementów zestawu (HERMETYZACJA)
+        // prywatna lista elementów zestawu
         private readonly List<MealSetItem> _items = new List<MealSetItem>();
 
         // Konstruktor — tryb dodawania nowego zestawu

@@ -1,18 +1,4 @@
-<!-- ===================================================================
-     AddMealSetWindow.xaml — okno dialogowe tworzenia/edycji zestawu dań.
-     STRUKTURA:
-       Row 0: Tytuł
-       Row 1: Nazwa zestawu (TextBox)
-       Row 2: Formularz dodawania produktu (ComboBox + ilość + przycisk "+ Dodaj")
-       Row 3: Lista dodanych produktów (ItemsControl + DataTemplate)
-       Row 4: Stopka (suma kalorii + przyciski Anuluj/Zapisz)
-     DATA BINDING w DataTemplate:
-       {Binding Product.Name} — nazwa produktu w elemencie zestawu.
-       {Binding Amount} — ilość w gramach.
-       {Binding CalculateCalories} — obliczone kalorie (metoda z MealSetItem).
-       Tag="{Binding}" — przekazuje obiekt MealSetItem do handlera usuwania.
-     DisplayMemberPath="Name" — ComboBox wyświetla nazwę produktu z FoodProduct.
-     =================================================================== -->
+<!-- AddMealSetWindow.xaml — okno dialogowe tworzenia/edycji zestawu dań.-->
 <Window x:Class="MonitorBilansuKalorycznego.View.AddMealSetWindow"
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"

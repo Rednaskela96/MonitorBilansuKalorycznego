@@ -8,13 +8,7 @@ namespace MonitorBilansuKalorycznego.View
 {
     // Enum do przełączania zakładek w bazie danych
     public enum DatabaseTab { Products, Activities, MealSets }
-
-    // =====================================================================
-    // FoodDatabaseView — widok bazy danych (produkty, aktywności, zestawy dań).
-    // DZIEDZICZENIE — dziedziczy po UserControl (WPF).
-    // Trzy zakładki (RadioButton) przełączają tryb wyświetlania (enum DatabaseTab).
-    // CRUD: dodawanie, edycja, usuwanie — okna dialogowe (ShowDialog).
-    // =====================================================================
+    
     public partial class FoodDatabaseView : UserControl
     {
         private ApplicationData _appData;
@@ -117,7 +111,7 @@ namespace MonitorBilansuKalorycznego.View
 
         private void SearchBox_TextChanged(object sender, TextChangedEventArgs e) => RefreshList();
 
-        // DODAWANIE — otwiera odpowiednie okno dialogowe w zależności od zakładki
+        // otwiera odpowiednie okno dialogowe w zależności od zakładki
         private void BtnAdd_Click(object sender, RoutedEventArgs e)
         {
             switch (_currentTab)
@@ -155,7 +149,7 @@ namespace MonitorBilansuKalorycznego.View
             }
         }
 
-        // EDYCJA — otwiera okno w trybie edycji (przekazuje istniejący obiekt)
+        // otwiera okno w trybie edycji (przekazuje istniejący obiekt)
         private void BtnEdit_Click(object sender, RoutedEventArgs e)
         {
             switch (_currentTab)
@@ -199,7 +193,7 @@ namespace MonitorBilansuKalorycznego.View
             }
         }
 
-        // USUWANIE — z potwierdzeniem (MessageBox YesNo)
+        // USUWANIE z potwierdzeniem (MessageBox YesNo)
         private void BtnDelete_Click(object sender, RoutedEventArgs e)
         {
             if (MessageBox.Show("Czy na pewno usunąć?", "Potwierdzenie", MessageBoxButton.YesNo) == MessageBoxResult.No) return;

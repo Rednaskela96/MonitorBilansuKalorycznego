@@ -14,23 +14,15 @@ using SkiaSharp;
 
 namespace MonitorBilansuKalorycznego.View
 {
-    // =====================================================================
-    // DashboardView — widok statystyk i wykresów.
-    // DZIEDZICZENIE — dziedziczy po UserControl (WPF).
-    // KOLEKCJE + LINQ — GroupBy, OrderBy, Select, Average, FirstOrDefault
-    //   do przetwarzania danych dzienników na statystyki.
-    // Zewnętrzna biblioteka LiveCharts2 — PieChart (donut) i CartesianChart (linia).
-    // =====================================================================
     public partial class DashboardView : UserControl
     {
-        // HERMETYZACJA — prywatne pole readonly, dostęp tylko wewnątrz klasy
         private readonly ApplicationData _appData;
 
         public DashboardView(ApplicationData appData)
         {
             InitializeComponent();
             _appData = appData;
-            // ZDARZENIE WPF — Loaded += lambda; ładuje statystyki po załadowaniu kontrolki
+            // ZDARZENIE WPF — ładuje statystyki po załadowaniu kontrolki
             Loaded += (_, _) => LoadStatistics();
         }
 
@@ -38,7 +30,6 @@ namespace MonitorBilansuKalorycznego.View
         private void LoadStatistics()
         {
             var dailyGoal = _appData.CurrentUser.GetDailyCalorieGoal();
-            // KOLEKCJA — pobieranie List<DailyLog> z DataManager<DailyLog>
             var allLogs = _appData.LogManager.Items;
 
             LoadTodayBalance(allLogs, dailyGoal);
@@ -76,16 +67,15 @@ namespace MonitorBilansuKalorycznego.View
                 TxtNetBalance.Foreground = new SolidColorBrush((Color)ColorConverter.ConvertFromString("#E74C3C"));
             }
 
-            // Wykres donut (PieChart) — LiveCharts2 PieSeries<double> z InnerRadius
+            // Wykres donut
             double filledValue = Math.Min(netBalance, dailyGoal);
             if (filledValue < 0) filledValue = 0;
             double emptyValue = Math.Max(dailyGoal - filledValue, 0);
             if (dailyGoal <= 0) { filledValue = 0; emptyValue = 1; }
-
-            // KOLEKCJA — tablica ISeries[] (interfejs z LiveCharts2)
+            
             PieChartBalance.Series = new ISeries[]
             {
-                new PieSeries<double>  // TYP GENERYCZNY — PieSeries<double>
+                new PieSeries<double>
                 {
                     Values = new[] { filledValue },
                     InnerRadius = 60,

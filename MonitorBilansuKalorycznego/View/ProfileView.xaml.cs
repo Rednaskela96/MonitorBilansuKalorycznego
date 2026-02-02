@@ -7,11 +7,6 @@ using MonitorBilansuKalorycznego.Model;
 
 namespace MonitorBilansuKalorycznego.View
 {
-    // =====================================================================
-    // ProfileView — widok profilu użytkownika (edycja danych osobowych).
-    // DZIEDZICZENIE — dziedziczy po UserControl (WPF).
-    // REFLEKSJA — Enum.GetValues(typeof(Gender)) ładuje enumy do ComboBox.
-    // =====================================================================
     public partial class ProfileView : UserControl
     {
         private ApplicationData _appData;
@@ -21,7 +16,7 @@ namespace MonitorBilansuKalorycznego.View
             InitializeComponent();
             _appData = appData;
 
-            // REFLEKSJA — typeof() pobiera typ, Enum.GetValues() zwraca wszystkie wartości enuma
+            //typeof() pobiera typ, Enum.GetValues() zwraca wszystkie wartości enuma
             ComboGender.ItemsSource = Enum.GetValues(typeof(Gender));
             ComboActivity.ItemsSource = Enum.GetValues(typeof(ActivityLevel));
 
@@ -72,11 +67,11 @@ namespace MonitorBilansuKalorycznego.View
                 user.CustomDailyCalorieGoal = 0;
                 InputCustomGoal.Text = "0";
 
-                _appData.SaveAll();  // SERIALIZACJA — zapis do pliku JSON
+                _appData.SaveAll();  // zapis do pliku JSON
                 UpdateResultText();
                 MessageBox.Show("Profil zaktualizowany!");
             }
-            catch  // PRZECHWYTYWANIE WYJĄTKÓW
+            catch 
             {
                 MessageBox.Show("Sprawdź poprawność danych (tylko liczby)!");
             }

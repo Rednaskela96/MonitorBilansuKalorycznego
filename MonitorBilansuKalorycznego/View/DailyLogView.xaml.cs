@@ -7,16 +7,8 @@ using MonitorBilansuKalorycznego.Model;
 
 namespace MonitorBilansuKalorycznego.View
 {
-    // =====================================================================
-    // DailyLogView — widok dziennika kalorycznego (główny ekran codzienny).
-    // DZIEDZICZENIE — dziedziczy po UserControl (WPF).
-    // LINQ — FirstOrDefault() do wyszukiwania logów po dacie.
-    // KOLEKCJE — operacje na List<MealEntry> i List<ActivityEntry>.
-    // Wzorzec: okna dialogowe (ShowDialog) do dodawania/edycji wpisów.
-    // =====================================================================
     public partial class DailyLogView : UserControl
     {
-        // HERMETYZACJA — prywatne pola (niedostępne z zewnątrz)
         private ApplicationData _appData;
         private DateTime _currentDate;
         private DailyLog _currentLog = null!;
@@ -40,7 +32,6 @@ namespace MonitorBilansuKalorycznego.View
             if (_currentLog == null)
             {
                 _currentLog = new DailyLog { Date = date };
-                // Nie dodajemy do kolekcji od razu — dopiero przy pierwszym wpisie (EnsureLogPersisted)
             }
 
             RefreshStats();
@@ -58,7 +49,7 @@ namespace MonitorBilansuKalorycznego.View
         // Odświeża UI (listy posiłków/aktywności, statystyki, pasek postępu)
         private void RefreshStats()
         {
-            // Odświeżenie ItemsSource (Data Binding w code-behind)
+            // Odświeżenie ItemsSource
             ListMeals.ItemsSource = null;
             ListMeals.ItemsSource = _currentLog.Meals;
 

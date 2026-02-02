@@ -3,11 +3,6 @@ using MonitorBilansuKalorycznego.Model;
 
 namespace MonitorBilansuKalorycznego.View
 {
-    // =====================================================================
-    // AddActivityWindow — okno dialogowe do dodawania/edycji definicji aktywności.
-    // Wzorzec okna dialogowego: ShowDialog() → DialogResult = true/false.
-    // Przeciążone konstruktory: bezparametrowy (dodawanie) i z parametrem (edycja).
-    // =====================================================================
     public partial class AddActivityWindow : Window
     {
         public PhysicalActivity ActivityData { get; private set; }

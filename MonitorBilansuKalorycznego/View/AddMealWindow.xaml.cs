@@ -7,18 +7,11 @@ using MonitorBilansuKalorycznego.Model;
 
 namespace MonitorBilansuKalorycznego.View
 {
-    // =====================================================================
-    // AddMealWindow — okno dialogowe dodawania posiłku do dziennika.
-    // Dwie zakładki: "Pojedynczy produkt" i "Zestaw dań".
-    // KOLEKCJE — List<MealEntry> (ResultEntries) zwraca wiele wpisów przy zestawie.
-    // LINQ — FirstOrDefault() do wyszukiwania produktu po Id.
-    // Wzorzec okna dialogowego: ShowDialog() → DialogResult = true/false.
-    // =====================================================================
     public partial class AddMealWindow : Window
     {
         public MealEntry ResultEntry { get; private set; } = null!;
 
-        // KOLEKCJA — lista wynikowych wpisów (1 element dla produktu, N dla zestawu)
+        // lista wynikowych wpisów (1 element dla produktu, N dla zestawu)
         public List<MealEntry> ResultEntries { get; private set; } = new List<MealEntry>();
 
         private readonly List<MealSet> _mealSets;
@@ -57,7 +50,7 @@ namespace MonitorBilansuKalorycznego.View
             BtnConfirm.Content = "Zapisz zmiany";
         }
 
-        // Przełączanie zakładek (RadioButton Checked events)
+        // Przełączanie zakładek
         private void TabProduct_Checked(object sender, RoutedEventArgs e)
         {
             if (PanelProduct == null) return;

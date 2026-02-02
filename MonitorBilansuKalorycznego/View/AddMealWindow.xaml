@@ -1,24 +1,11 @@
-<!-- ===================================================================
-     AddMealWindow.xaml — okno dialogowe dodawania posiłku do dziennika.
-     DWA TRYBY (zakładki RadioButton):
-       "Pojedynczy produkt" — ComboBox z produktami + ilość w gramach.
-       "Zestaw dań" — ComboBox z zestawami + podgląd zawartości (ItemsControl).
-     STYL MealTabStyle — RadioButton z ControlTemplate i Triggerem
-       (zmiana koloru i podkreślenia po zaznaczeniu).
-     DATA BINDING w DataTemplate:
-       {Binding Product.Name} — nazwa produktu w zestawie.
-       {Binding Amount} — ilość w gramach.
-       {Binding CalculateCalories} — wynik metody (obliczone kalorie).
-     DisplayMemberPath="Name" — ComboBox wyświetla właściwość Name z modelu.
-     WZORZEC OKNA DIALOGOWEGO — ShowDialog() z code-behind.
-     =================================================================== -->
+<!-- AddMealWindow.xaml — okno dialogowe dodawania posiłku do dziennika.-->
 <Window x:Class="MonitorBilansuKalorycznego.View.AddMealWindow"
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         Title="Zjedz posiłek" Height="400" Width="460" WindowStartupLocation="CenterScreen" ResizeMode="NoResize" Background="White">
 
     <Window.Resources>
-        <!-- STYL zakładki — ControlTemplate + Trigger (IsChecked) -->
+        <!-- ControlTemplate + Trigger -->
         <Style x:Key="MealTabStyle" TargetType="RadioButton">
             <Setter Property="FontSize" Value="13"/>
             <Setter Property="FontWeight" Value="SemiBold"/>

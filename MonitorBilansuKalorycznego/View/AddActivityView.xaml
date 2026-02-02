@@ -1,11 +1,5 @@
-<!-- ===================================================================
-     AddActivityView.xaml — okno dialogowe dodawania/edycji definicji aktywności.
-     PROSTY FORMULARZ — nazwa aktywności + spalanie kcal/h.
-     IsCancel="True" — przycisk Anuluj zamyka okno klawiszem Escape.
-     Click="BtnSave_Click" / Click="BtnCancel_Click" — zdarzenia WPF
-       obsługiwane w code-behind (walidacja + Validate() z modelu).
-     WZORZEC OKNA DIALOGOWEGO — ShowDialog() → DialogResult = true/false.
-     =================================================================== -->
+<!-- AddActivityView.xaml — okno dialogowe dodawania/edycji definicji aktywności.
+     WZORZEC OKNA DIALOGOWEGO — ShowDialog() → DialogResult = true/false.-->
 <Window x:Class="MonitorBilansuKalorycznego.View.AddActivityWindow"
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
